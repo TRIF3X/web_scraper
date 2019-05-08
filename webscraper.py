@@ -15,16 +15,19 @@ scrapedData = []
 
 # Use this for loop to find HTML elements and its attributes that we want
 # More information can be found on the BeautifulSoup docs: https://www.crummy.com/software/BeautifulSoup/bs4/doc/
-for shirt in content.findAll('div', attrs={"class": "section"}):
-    scrapeObj = {
-        "image": shirt.find('img', attrs={"class": "item-image"}),
+for product in content.findAll('li', class_="product-item"):
+    scrapedObj = {
+        "name": product.find("h3", class_="item-heading").getText(),
+        "price": product.find("span", class_="price regular").getText(),
+        "image": product.find("img", class_="item-image").get('src'),
+        "image-alt": product.find("img", class_="item-image").get('data-altimage')
     }
-    scrapedData.append(scrapeObj)
-    print(scrapedData)
+    scrapedData.append(scrapedObj)
+
 
 # open with file name where you want the content to go, 'w' will be used to write to this file
-# with open('menShirts.json', 'w') as outfile:
+with open('menShirts.json', 'w') as outfile:
     # Convert data into JSON format
     # https://docs.python.org/3/library/json.html
-    # json.dump(scrapedData, outfile)
+    json.dump(scrapedData, outfile)
 
